@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Готовность бизнеса к AI | Алексей Зотов</title>
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: #1a1d24;
+            --text-main: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-blue: #00c3ff;
+            --accent-orange: #ff9d00;
+            --success: #00ff88;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* BLOCKS */
+        .block-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--accent-blue);
+            font-size: 18px;
+            font-weight: 600;
+            border-left: 3px solid var(--accent-orange);
+            padding-left: 10px;
+        }
+
+        /* CARDS */
+        .question-card {
+            background-color: var(--card-bg);
+            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+            user-select: none; /* Чтобы текст не выделялся при клике */
+        }
+
+        .question-card:hover {
+            background-color: #252932;
+        }
+
+        .question-card.active {
+            border-color: var(--accent-blue);
+            background-color: #1f252e;
+        }
+
+        .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 6px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .question-card.active .custom-checkbox {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .custom-checkbox::after {
+            content: '✔';
+            color: white;
+            font-size: 14px;
+            display: none;
+        }
+
+        .question-card.active .custom-checkbox::after {
+            display: block;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        /* BUTTON */
+        .btn {
+            background: linear-gradient(135deg, var(--accent-blue), #0066cc);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 195, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* RESULT SECTION */
+        #result-section {
+            display: none;
+            margin-top: 40px;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--text-secondary);
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #2a2f3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            color: var(--accent-orange);
+            border: 3px solid var(--accent-orange);
+        }
+
+        .result-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .result-desc {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .cta-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .cta-link:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #555;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>ГОТОВНОСТЬ БИЗНЕСА К AI</h1>
+        <div class="subtitle">Честный чек-лист от Алексея Зотова</div>
+        <p style="font-size: 13px; color: #777; margin-top: 10px;">Отметьте пункты, которые про вас 👇</p>
+    </header>
+
+    <form id="quizForm">
+        <div class="block-title">Блок 1. Процессы</div>
+        
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>У меня есть письменные регламенты хотя бы для 50% задач.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Если я заболею на неделю, продажи не остановятся.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Мы ведем базу клиентов в CRM/Таблице, а не в блокнотах.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Я четко знаю KPI и результат каждого сотрудника.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="block-title">Блок 2. Команда</div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Сотрудники не боятся новых программ и быстро учатся.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>В компании нет «незаменимых звезд», на которых держится всё.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Команда работает по инструкциям, а не «по настроению».</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="block-title">Блок 3. Мышление Лидера</div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Я готов потратить время сейчас, чтобы сэкономить его потом.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Я готов вникать в детали на старте автоматизации.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <div class="question-card">
+            <div class="custom-checkbox"></div>
+            <span>Я готов делегировать принятие рутинных решений системе.</span>
+            <input type="checkbox" value="1">
+        </div>
+
+        <button type="button" class="btn" onclick="calculateResult()">ПОЛУЧИТЬ РЕЗУЛЬТАТ</button>
+    </form>
+
+    <div id="result-section">
+        <div class="score-circle" id="scoreValue">0</div>
+        <div class="result-title" id="resultTitle">Заголовок</div>
+        <p class="result-desc" id="resultDesc">Описание</p>
+        
+        <a href="https://t.me/Aleksei_Zotov" class="cta-link" target="_blank">Обсудить стратегию в Telegram →</a>
+    </div>
+
+    <footer>
+        &copy; 2026 Алексей Зотов. AI & Business Transformation.
+    </footer>
+</div>
+
+<script>
+    // ИСПРАВЛЕННАЯ ЛОГИКА
+    const cards = document.querySelectorAll('.question-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', function() {
+            const checkbox = this.querySelector('input');
+            
+            // Переключаем чекбокс вручную
+            checkbox.checked = !checkbox.checked;
+            
+            // Меняем визуал
+            if (checkbox.checked) {
+                this.classList.add('active');
+            } else {
+                this.classList.remove('active');
+            }
+        });
+    });
+
+    function calculateResult() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const score = checkboxes.length;
+        
+        const scoreEl = document.getElementById('scoreValue');
+        const titleEl = document.getElementById('resultTitle');
+        const descEl = document.getElementById('resultDesc');
+        const resultSection = document.getElementById('result-section');
+        const form = document.getElementById('quizForm');
+
+        scoreEl.innerText = score + "/10";
+
+        // ЛОГИКА РЕЗУЛЬТАТОВ
+        if (score <= 3) {
+            titleEl.innerText = "🚧 Ручное управление";
+            descEl.innerText = "Вам пока рано внедрять сложные нейросети. Если поставить мощный двигатель на телегу — она развалится. Совет: Начните с наведения порядка в процессах.";
+            scoreEl.style.borderColor = "#ff4444";
+            scoreEl.style.color = "#ff4444";
+        } else if (score <= 7) {
+            titleEl.innerText = "📈 Зона роста";
+            descEl.innerText = "Вы готовы к первым шагам! Можно внедрять простых AI-ассистентов (автоответы, транскрибация), чтобы разгрузить себя.";
+            scoreEl.style.borderColor = "#ff9d00"; // Orange
+            scoreEl.style.color = "#ff9d00";
+        } else {
+            titleEl.innerText = "🚀 Пилот Системы";
+            descEl.innerText = "Ваш бизнес — идеальная площадка для AI. Вы можете сократить расходы на 30% и ускорить процессы в разы уже в этом месяце.";
+            scoreEl.style.borderColor = "#00ff88"; // Green
+            scoreEl.style.color = "#00ff88";
+        }
+
+        form.style.display = 'none';
+        resultSection.style.display = 'block';
+        resultSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
